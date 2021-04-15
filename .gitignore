@@ -1,0 +1,35 @@
+# Eiffel compilation artifacts
+EIFGENs/
+*.melted
+*.frozen
+*.rc
+*.res
+*.idirs
+
+# C build artifacts
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+build/
+bin/gantry
+bin/gantry_test
+bin/gantry_bench
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor and OS
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
