@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-23-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-23-0 http://www.eiffel.com/developers/xml/configuration-1-23-0.xsd" name="gantry" uuid="8F1B3E2A-9C4D-4E7B-A0D1-2F5E8C9B0A3D">
+	<target name="gantry">
+		<root class="GANTRY_APPLICATION" feature="make"/>
+		<option warning="warning" syntax="standard">
+			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
+		</option>
+		<setting name="console_application" value="true"/>
+		<setting name="total_order_on_reals" value="true"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/tests$</exclude>
+			<exclude>/benchmarks$</exclude>
+		</file_rule>
+		<library name="base" location="$ISE_LIBRARY/library/base/base.ecf"/>
+		<library name="time" location="$ISE_LIBRARY/library/time/time.ecf"/>
+		<cluster name="gantry" location="src" recursive="true"/>
+	</target>
+	<target name="gantry_test" extends="gantry">
+		<root class="GANTRY_TEST_SUITE" feature="make"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/benchmarks$</exclude>
+		</file_rule>
+		<cluster name="tests" location="tests" recursive="true"/>
+	</target>
+	<target name="gantry_bench" extends="gantry">
+		<root class="GANTRY_BENCH_RUNNER" feature="make"/>
+		<file_rule>
+			<exclude>/EIFGENs$</exclude>
+			<exclude>/tests$</exclude>
+		</file_rule>
+		<cluster name="benchmarks" location="benchmarks" recursive="true"/>
+	</target>
+</system>
