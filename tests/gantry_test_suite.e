@@ -14,12 +14,14 @@ feature {NONE} -- Initialization
 			-- Run all subsystem test suites.
 		local
 			core_tests: TEST_CORE
+			plc_tests: TEST_PLC
 		do
 			print ("============================================================%N")
 			print ("       GANTRY HIGH-ASSURANCE VERIFICATION SUITE             %N")
 			print ("============================================================%N%N")
 
 			create core_tests.make
+			create plc_tests.make
 
 			print ("%N============================================================%N")
 			print ("       VERIFICATION COMPLETE: ALL ASSERTIONS PASSED         %N")
