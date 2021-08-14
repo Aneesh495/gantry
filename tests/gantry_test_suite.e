@@ -18,6 +18,7 @@ feature {NONE} -- Initialization
 			safety_tests: TEST_SAFETY
 			proto_tests: TEST_PROTOCOLS
 			hist_tests: TEST_HISTORIAN
+			alarm_tests: TEST_ALARMS
 		do
 			print ("============================================================%N")
 			print ("       GANTRY HIGH-ASSURANCE VERIFICATION SUITE             %N")
@@ -28,6 +29,7 @@ feature {NONE} -- Initialization
 			create safety_tests.make
 			create proto_tests.make
 			create hist_tests.make
+			create alarm_tests.make
 
 			print ("%N============================================================%N")
 			print ("       VERIFICATION COMPLETE: ALL ASSERTIONS PASSED         %N")
