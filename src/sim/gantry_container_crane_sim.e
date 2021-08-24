@@ -158,7 +158,7 @@ feature -- Simulation Lifecycle
 			end
 
 			-- Advance sim clock
-			sim_time_ms := sim_time_ms + (a_dt_sec * 1000.0).to_integer_64
+			sim_time_ms := sim_time_ms + (a_dt_sec * 1000.0).truncated_to_integer_64.max (1)
 			step_count := step_count + 1
 
 			-- 6. Update process image table field inputs

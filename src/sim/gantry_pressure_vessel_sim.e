@@ -70,7 +70,7 @@ feature -- Simulation Lifecycle
 			coolant_flow: REAL_64
 			vent_open: BOOLEAN
 			q_rxn, q_cool: REAL_64
-			dt_temp, dt_press: REAL_64
+			dt_temp: REAL_64
 		do
 			-- 1. Read commands from image table
 			feed_rate := 100.0
@@ -115,7 +115,7 @@ feature -- Simulation Lifecycle
 			end
 
 			-- Advance clock
-			sim_time_ms := sim_time_ms + (a_dt_sec * 1000.0).to_integer_64
+			sim_time_ms := sim_time_ms + (a_dt_sec * 1000.0).truncated_to_integer_64.max (1)
 			step_count := step_count + 1
 
 			-- 4. Publish telemetry to image table

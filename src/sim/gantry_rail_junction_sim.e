@@ -126,7 +126,7 @@ feature -- Simulation Lifecycle
 			tc4_branch_occ := (train_pos_m >= 200.0 and point_position = 1)
 
 			-- Advance sim clock
-			sim_time_ms := sim_time_ms + (a_dt_sec * 1000.0).to_integer_64
+			sim_time_ms := sim_time_ms + (a_dt_sec * 1000.0).truncated_to_integer_64.max (1)
 			step_count := step_count + 1
 
 			-- 4. Publish sensor telemetry to image table
