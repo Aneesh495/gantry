@@ -452,6 +452,12 @@ gantry_plant_t* gantry_plant_create(const char* plant_type, gantry_engine_t* eng
             gantry_register_digital_input(engine, "CRANE_TROLLEY_EAST_LS", "East limit", false, 0);
             gantry_register_analog_output(engine, "CRANE_TROLLEY_FORCE_CMD", "Trolley thrust", "kN", -100, 100, -100, 100);
             gantry_register_analog_output(engine, "CRANE_HOIST_VEL_CMD", "Hoist winch velocity", "m/s", -3, 3, -3, 3);
+
+            gantry_write_analog(engine, "CRANE_TROLLEY_POS", p->trolley_pos_m);
+            gantry_write_analog(engine, "CRANE_HOIST_POS", p->hoist_pos_m);
+            gantry_write_analog(engine, "CRANE_SWAY_ANGLE", 0.0);
+            gantry_write_digital(engine, "CRANE_TROLLEY_WEST_LS", false);
+            gantry_write_digital(engine, "CRANE_TROLLEY_EAST_LS", false);
         }
     } else if (strcmp(plant_type, "reactor") == 0) {
         p->kind = PLANT_TYPE_REACTOR;
@@ -465,6 +471,10 @@ gantry_plant_t* gantry_plant_create(const char* plant_type, gantry_engine_t* eng
             gantry_register_analog_output(engine, "COOLANT_FLOW_CMD", "Coolant flow", "m3/h", 0, 100, 0, 100);
             gantry_register_analog_output(engine, "FEED_RATE_CMD", "Chemical feed rate", "kg/h", 0, 500, 0, 500);
             gantry_register_digital_output(engine, "EMERGENCY_VENT_VALVE", "Vent valve", false);
+
+            gantry_write_analog(engine, "REACTOR_TEMP", p->reactor_temp_c);
+            gantry_write_analog(engine, "REACTOR_PRESS", p->reactor_press_bar);
+            gantry_write_digital(engine, "BURST_DISC_STATUS", false);
         }
     } else if (strcmp(plant_type, "rail") == 0) {
         p->kind = PLANT_TYPE_RAIL;
@@ -478,6 +488,12 @@ gantry_plant_t* gantry_plant_create(const char* plant_type, gantry_engine_t* eng
             gantry_register_digital_input(engine, "RAIL_POINT_NORMAL_IND", "Point normal", false, 0);
             gantry_register_digital_input(engine, "RAIL_POINT_REVERSE_IND", "Point reverse", false, 0);
             gantry_register_digital_output(engine, "RAIL_POINT_MOTOR_REV_CMD", "Switch to reverse", false);
+
+            gantry_write_digital(engine, "RAIL_POINT_NORMAL_IND", true);
+            gantry_write_digital(engine, "RAIL_POINT_REVERSE_IND", false);
+            gantry_write_digital(engine, "RAIL_TC1_APPROACH", true);
+            gantry_write_digital(engine, "RAIL_TC2_TURNOUT", false);
+            gantry_write_digital(engine, "RAIL_TC3_MAIN", false);
         }
     } else {
         free(p);
