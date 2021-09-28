@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GANTRY: Cyber-Physical Automation Runtime & Safety Interlock SCADA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scada-container">
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="brand">
+        <span class="brand-logo">&#x2699;</span>
+        <div class="brand-text">
+          <h1>GANTRY</h1>
+          <span class="subtitle">Deterministic Cyclic Executive &amp; Formal Safety Runtime</span>
+        </div>
+      </div>
+
+      <div class="runtime-telemetry">
+        <div class="telemetry-item">
+          <span class="label">SCAN RATE</span>
+          <span class="value cyan" id="telemetry-scan-rate">1000 Hz</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="label">SCAN DURATION</span>
+          <span class="value green" id="telemetry-scan-us">42 &mu;s</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="label">MAX JITTER</span>
+          <span class="value green" id="telemetry-jitter-us">3.2 &mu;s</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="label">INTEGRITY</span>
+          <span class="badge sil4">IEC 61508 SIL-3/4</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-estop" class="btn-estop">
+          <span class="estop-icon">&#x26A0;</span>
+          <span class="estop-text">EMERGENCY STOP</span>
+        </button>
+        <button id="btn-reset-estop" class="btn-reset" disabled>RESET SAFETY</button>
+      </div>
+    </header>
+
+    <!-- Main Operational Workspace -->
+    <main class="workspace-grid">
+      <!-- Left Column: Plant Selection & Live Physical Simulation View -->
+      <section class="panel plant-panel">
+        <div class="panel-header">
+          <h2>CYBER-PHYSICAL PLANT MODEL</h2>
+          <div class="plant-tabs">
+            <button class="tab-btn active" data-plant="crane">Container Crane</button>
+            <button class="tab-btn" data-plant="reactor">CSTR Reactor</button>
+            <button class="tab-btn" data-plant="rail">Rail Interlocking</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="svg-viewport" id="svg-viewport">
+            <!-- Dynamic SVG injected by app.js -->
+          </div>
+
+          <div class="actuator-controls" id="actuator-controls">
+            <!-- Dynamic Controls injected based on selected plant -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Column: Cause-and-Effect Matrix & Live Oscilloscope Strip Chart -->
+      <section class="panel center-panel">
+        <div class="panel-header">
+          <h2>CAUSE &amp; EFFECT SAFETY MATRIX (ISA-84 / IEC 61508)</h2>
+          <span class="status-indicator normal" id="interlock-status">ALL INTERLOCKS HEALTHY</span>
+        </div>
+        <div class="panel-body matrix-body">
+          <div class="matrix-table-container">
+            <table class="matrix-table" id="cem-table">
+              <thead>
+                <tr>
+                  <th>RULE ID</th>
+                  <th>CAUSE SENSOR</th>
+                  <th>CONDITION</th>
+                  <th>EFFECT ACTUATOR</th>
+                  <th>FAIL-SAFE</th>
+                  <th>SIL</th>
+                  <th>TRIP STATE</th>
+                </tr>
+              </thead>
+              <tbody id="cem-body">
+                <!-- Injected via app.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3>REAL-TIME CONTINUOUS TELEMETRY STRIP CHART</h3>
+              <div class="chart-legend" id="chart-legend">
+                <!-- Injected by app.js -->
+              </div>
+            </div>
+            <canvas id="strip-chart" width="700" height="180"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: ISA-18.2 Alarm Annunciator & Sequence of Events Journal -->
+      <section class="panel right-panel">
+        <div class="panel-header">
+          <h2>ISA-18.2 ALARM ANNUNCIATOR</h2>
+          <div class="alarm-actions">
+            <button id="btn-ack-alarms" class="btn-subtle">ACK ALL</button>
+            <button id="btn-silence-horn" class="btn-subtle">SILENCE HORN</button>
+          </div>
+        </div>
+        <div class="panel-body alarm-body">
+          <div class="alarm-summary-banner" id="alarm-banner">
+            <span class="alarm-horn-icon" id="alarm-horn-icon">&#x1F50A;</span>
+            <span class="alarm-summary-text" id="alarm-summary-text">0 ACTIVE ALARMS: SYSTEM NORMAL</span>
+          </div>
+
+          <div class="alarm-tiles-grid" id="alarm-tiles">
+            <!-- Alarm tiles injected by app.js -->
+          </div>
+
+          <div class="soe-container">
+            <h3>SEQUENCE OF EVENTS (SOE) HISTORIAN JOURNAL</h3>
+            <div class="soe-table-wrapper">
+              <table class="soe-table">
+                <thead>
+                  <tr>
+                    <th>TIME (UTC)</th>
+                    <th>TAG</th>
+                    <th>EVENT DESCRIPTION</th>
+                    <th>VALUE</th>
+                  </tr>
+                </thead>
+                <tbody id="soe-body">
+                  <!-- Populated by events -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Panel: IEC 61131-3 Structured Text Execution & SDT Compression Stats -->
+      <section class="panel bottom-panel">
+        <div class="bottom-split">
+          <div class="st-pane">
+            <div class="panel-header small">
+              <h3>IEC 61131-3 STRUCTURED TEXT CYCLIC PROGRAM</h3>
+              <span class="tag-badge">SCAN CYCLE STEP</span>
+            </div>
+            <pre class="code-block" id="st-code-view">
+// Active Cyclic Task Execution Block
+VAR
+  crane_pos : REAL;
+  sway_deg  : REAL;
+  trolley_thrust_cmd : REAL;
+END_VAR
+
+IF ABS(sway_deg) > 12.0 THEN
+  // Engage non-linear sway counter-torque damping
+  trolley_thrust_cmd := -1.5 * sway_deg;
+  ALARM_SWAY_HIGH := TRUE;
+ELSE
+  ALARM_SWAY_HIGH := FALSE;
+END_IF;
+            </pre>
+          </div>
+
+          <div class="sdt-pane">
+            <div class="panel-header small">
+              <h3>SWINGING DOOR TRENDING (SDT) COMPRESSION</h3>
+              <span class="tag-badge green" id="sdt-ratio-badge">98.2% BANDWIDTH SAVINGS</span>
+            </div>
+            <div class="sdt-stats-grid">
+              <div class="sdt-card">
+                <span class="sdt-label">RAW TELEMETRY INGEST</span>
+                <span class="sdt-val" id="sdt-raw-count">10,420 pkts</span>
+              </div>
+              <div class="sdt-card">
+                <span class="sdt-label">ARCHIVED RETENTION</span>
+                <span class="sdt-val" id="sdt-archive-count">187 records</span>
+              </div>
+              <div class="sdt-card">
+                <span class="sdt-label">DEADBAND TOLERANCE</span>
+                <span class="sdt-val">&plusmn;0.15 EU</span>
+              </div>
+              <div class="sdt-card">
+                <span class="sdt-label">HISTORIAN STATUS</span>
+                <span class="sdt-val green">RING BUFFER FIFO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
