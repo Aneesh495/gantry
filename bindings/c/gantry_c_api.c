@@ -323,6 +323,7 @@ int gantry_trip_estop(gantry_engine_t* engine, const char* operator_id, const ch
 }
 
 int gantry_reset_estop(gantry_engine_t* engine, const char* operator_id) {
+    (void)operator_id;
     if (!engine) return GANTRY_ERR_INVALID_ARG;
     engine->estop_active = false;
     memset(engine->estop_operator, 0, sizeof(engine->estop_operator));
