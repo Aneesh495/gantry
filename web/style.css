@@ -636,3 +636,25 @@ canvas#strip-chart {
 .sdt-val.green {
   color: var(--accent-green);
 }
+
+.preview-context {
+  margin: 0;
+  padding: .6rem 1rem;
+  background: #121b27;
+  color: #d6e2ed;
+  font: 400 .85rem/1.45 system-ui, sans-serif;
+  overflow-wrap: anywhere;
+}
+.preview-context a { color: #9bdeff; }
+:focus-visible { outline: 3px solid #9bdeff; outline-offset: 2px; }
+
+.workspace-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr) minmax(0, 1fr); }
+.workspace-grid > * { min-width: 0; }
+.panel canvas { max-width: 100%; }
+.top-bar { flex-wrap: wrap; }
+@media (max-width: 1030px) {
+  body, .app-shell { height: auto; min-height: 100vh; overflow: auto; }
+  .workspace-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
+  .workspace-grid > * { grid-column: 1; overflow: auto; }
+  .panel table { width: 100%; }
+}
